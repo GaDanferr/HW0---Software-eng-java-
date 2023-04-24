@@ -157,7 +157,6 @@ public class Main {
             k /= 10;
             counter_row ++;
             System.out.print(" ");
-
         }
         for (int i=0; i<= rows ; i++){
             for (int j=0; j<=columns; j++){
