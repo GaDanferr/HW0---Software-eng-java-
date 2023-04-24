@@ -149,35 +149,57 @@ public class Main {
     public static void printBoard(char[][] board){
         int rows = board.length;
         int columns = board[0].length;
+        int offset_rows;
+        int k=rows-1;
+        int counter_row=0;
+        int counter_row_2;
+        while(k>0){
+            k /= 10;
+            counter_row ++;
+            System.out.print(" ");
+
+        }
         for (int i=0; i<= rows ; i++){
             for (int j=0; j<=columns; j++){
                 if (i==0){
-                    if(j==0)
-                        System.out.print(" " +"");
-                    else {
+                    if(j!=0) {
                         System.out.print(" " + (j-1));
                     }
                 }
                 else {
-                    if (j == 0)
-                        System.out.print("" + (i-1));
-                    else
-                        System.out.print(" " + board[i-1][j - 1]);
+                    if (j == 0) {
+                        offset_rows = i-1;
+                        counter_row_2=0;
+                        while (offset_rows > 0) {
+                            offset_rows /= 10;
+                            counter_row_2++;
+                        }
+                        if ((i==1)&&(rows-1!=0)){
+                            counter_row_2 ++;
+                        }
+                        while (counter_row_2 < counter_row) {
+                            counter_row_2++;
+                            System.out.print(" ");
+                        }
+                        System.out.print(i - 1);
+                    }
+                    else {
+                        System.out.print(" " + board[i - 1][j - 1]);
+                    }
                 }
             }
             System.out.println();
         }
     }
-    public static boolean checkIfLegalPlacement(char[][] board,int rows , int columns ,int i, int[] arr_ships ,
+    public static boolean checkIfLegalPlacement(char[][] board,int rows , int columns ,int ship_size,
                                             int[] location ,boolean player){
         boolean flag = false;
         int x = location[0];
         int y = location[1];
         int orientation = location[2];
         int ship_width = 1;
-        int ship_size = arr_ships[(i*2)+1]; // should send the size instead
         if (((orientation==1)&&( x + ship_size > rows)) |
-                ((orientation==0)&&( y + ship_size > columns))) {
+            ((orientation==0)&&( y + ship_size > columns))) {
             if (player) {
                 System.out.println("Battleship exceeds the boundaries of the board, try again!");
             }
@@ -229,33 +251,34 @@ public class Main {
         return flag;
 
     }
-    public static int[] generatePCLocation(int rows, int columns){
+    public static int[] getPCLocation(int rows, int columns){
         int[] location = new int[3];
         location[0] = rnd.nextInt(rows); // x cord
         location[1] = rnd.nextInt(columns); // y cord
         location[2] = rnd.nextInt(2); // orientation
         return location;
     }
-    public static void placeBattleships(char[][] board , int[] arr_ships, boolean player){
-        int amount_of_ships = arr_ships.length/2;
+    public static void placeBattleships(char[][] board ,int ship_variance, int[] arr_ships, boolean player){
         int rows = board.length;
         int columns = board[0].length;
         int[] location;
-        for (int i=0 ; i < amount_of_ships;i++){
+        int ship_size;
+        for (int i=0 ; i < ship_variance;i++){
+            ship_size = arr_ships[(i*2) + 1];
             if (player){
-                System.out.println("Enter location and orientation for battleship of size " + (arr_ships[i*2+1]));
+                System.out.println("Enter location and orientation for battleship of size " + ship_size);
             }
             for (int j=0 ; j<arr_ships[i*2];){
                 if(player) {
                     location = stringToIntArray(scanner.nextLine());
                 }
                 else {
-                    location = generatePCLocation(rows,columns); // generates a location for PC ship
+                    location = getPCLocation(rows,columns); // generates a location for PC ship
                 }
-                if (checkIfLegalPlacement(board,rows,columns,i,arr_ships,location,player)){
+                if (checkIfLegalPlacement(board,rows,columns,ship_size,location,player)){
                     int x = location[0];
                     int y = location[1];
-                    for (int p=0;p < arr_ships[(i*2)+1]; p++){
+                    for (int p=0;p < ship_size; p++){
                         if (location[2]==0){
                             board[x][y+p] = '#';
                         }
@@ -312,13 +335,17 @@ public class Main {
         char[][] player_guessing_board = createBoard(board_size);
         char[][] pc_guessing_board = createBoard(board_size);
 
+
         String string_of_ships = scanner.nextLine();
         int[] array_of_ships = stringToIntArray(string_of_ships); // create the array of ships to play on player board
         int ship_count = countShips(array_of_ships);
+        int ship_variance = array_of_ships.length/2;
         System.out.println("Your current game board: "); // temp here
         printBoard(player_guessing_board);              // temp here
-        placeBattleships(player_board,array_of_ships,true); // place ships on player generated board
-        placeBattleships(pc_board, array_of_ships,false); // place ships on pc generated board
+
+
+        placeBattleships(player_board,ship_variance,array_of_ships ,true); // place ships on player generated board
+        placeBattleships(pc_board, ship_variance,array_of_ships,false); // place ships on pc generated board
 
         if(gameStart(player_board,player_guessing_board,pc_board,pc_guessing_board,ship_count)) // starts the game and checks result
             System.out.println("You won the game!");
