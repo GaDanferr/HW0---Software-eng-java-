@@ -39,7 +39,7 @@ public class Main {
             }
             for(i=1;(flag_1)&& (x-i>=0) && (board[x-i][y]!='–');i++) {
                 if (board[x - i][y] == '#') {
-                    flag_2 = false;
+                    flag_1 = false;
                 }
             }
         }
