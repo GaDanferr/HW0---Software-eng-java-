@@ -216,11 +216,11 @@ public class Main {
         else {
             flag = true;
             if (orientation == 1) { // seems a bit too complicated checks the grid around the ship
-                for (int k = -1; k <= ship_size; k++) {
-                    for (int p=-1; p<= ship_width ; p++)
-                        if ((x+k >=0)&&(x+k < rows)&&(y+p >=0)&&(y+p < columns)&&(board[x+k][y+p] == '#')) {
+                for (int i = -1; i <= ship_size; i++) {
+                    for (int j = -1; j <= ship_width ; j++)
+                        if ((x+ i >=0)&&(x+ i < rows)&&(y+ j >=0)&&(y+ j < columns)&&(board[x+ i][y+ j] == '#')) {
                             if (player) {
-                                if(p==0) {
+                                if(j ==0) {
                                     System.out.println("Battleship overlaps with another battleship, try again!");
                                 }
                                 else{
@@ -232,11 +232,11 @@ public class Main {
                 }
             }
             else {
-                for (int k = -1; k <= ship_size; k++) {
-                    for(int p=-1; p<=ship_width ; p++)
-                        if ((x+p <rows)&&(x+p>=0)&&(y+k<columns)&&( y+k >=0)&&(board[x+p][y+k] == '#')) {
+                for (int i = -1; i <= ship_size; i++) {
+                    for(int j = -1; j <=ship_width ; j++)
+                        if ((x+ j <rows)&&(x+ j >=0)&&(y+ i <columns)&&( y+ i >=0)&&(board[x+ j][y+ i] == '#')) {
                             if (player) {
-                                if (p == 0) {
+                                if (j == 0) {
                                     System.out.println("Battleship overlaps with another battleship, try again!");
                                 } else {
                                     System.out.println("Adjacent battleship detected, try again!");
@@ -262,12 +262,14 @@ public class Main {
         int columns = board[0].length;
         int[] location;
         int ship_size;
+        int ship_count;
         for (int i=0 ; i < ship_variance;i++){
             ship_size = arr_ships[(i*2) + 1];
             if (player){
                 System.out.println("Enter location and orientation for battleship of size " + ship_size);
             }
-            for (int j=0 ; j<arr_ships[i*2];){
+            ship_count = arr_ships[i*2];
+            for (int j=0 ; j<ship_count;){
                 if(player) {
                     location = stringToIntArray(scanner.nextLine());
                 }
