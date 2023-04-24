@@ -217,17 +217,17 @@ public class Main {
             flag = true;
             if (orientation == 1) { // seems a bit too complicated checks the grid around the ship
                 for (int i = -1; i <= ship_size; i++) {
-                    for (int j = -1; j <= ship_width ; j++)
+                    for (int j = -1; j <= ship_width ; j++){
                         if ((x+ i >=0)&&(x+ i < rows)&&(y+ j >=0)&&(y+ j < columns)&&(board[x+ i][y+ j] == '#')) {
                             if (player) {
-                                if(j ==0) {
+                                if (j == 0) {
                                     System.out.println("Battleship overlaps with another battleship, try again!");
-                                }
-                                else{
+                                } else {
                                     System.out.println("Adjacent battleship detected, try again!");
                                 }
                             }
                             return false;
+                        }
                     }
                 }
             }
